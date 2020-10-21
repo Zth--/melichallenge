@@ -67,32 +67,23 @@ Date: Wed, 21 Oct 2020 18:04:30 GMT
 # Level 1
 
 The algorithm can be found on the file DnaSolver and it is pretty much self-explanatory.
-
 It is as efficient as possible.
-
 It receives a (NxN) matrix and returns true if there are four consecutive letters (possible letters are A,T,G,C).
-
 Pretty much like the game Connect 4 but with four colours instead of only two.
-
 In the worst case scenario it has to check all the possible combinations, which of course gets more expensive with larger matrices.
-
 It doesn't calculate "impossible paths", but that optimization only matters for relatively small matrices.
 
 
 # Level 2
 
 There's not much to be said about this level, it is a simple "/mutant" endpoint that works with the previous algorithm.
-
 It has to answer 200-OK if it's a mutant and 403-Forbidden if it's a human.
-
 What I had to consider here is what to do if Magneto sends invalid dna sequences, should I answer 400-Bad Request or
-
 stick to 403-Forbidden? I talk a little more about this on the file DnaSolver.
 
 # Level 3
 
 This level is far more complex than the previous two, and I spent most of my time tackling this one.
-
 First I'll talk a little bit about the design that I chose for the problem given the considerations
 
 ## Constraints
