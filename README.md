@@ -12,7 +12,7 @@ The whole explanation is after the endpoints so please don't skip it.
 ### Request
 `POST /mutant`
 ```
-curl -i -d '{"dna":["AAAACA","CTCTCT","TCTCTC","GGGTTT","TAAAGG","GGGTTT"]}' http://https://caramel-biplane-292821.ue.r.appspot.com//mutant -H "Content-Type: application/json"
+curl -i -d '{"dna":["AAAACA","CTCTCT","TCTCTC","GGGTTT","TAAAGG","GGGTTT"]}' https://caramel-biplane-292821.ue.r.appspot.com//mutant -H "Content-Type: application/json"
 ```
 
 ### Response
@@ -30,7 +30,7 @@ It will answer 200 if it's mutant. 403 if it's a human. 400 if it's a bad reques
 
 `GET /stats`
 ```
-curl -i http://https://caramel-biplane-292821.ue.r.appspot.com//stats
+curl -i https://caramel-biplane-292821.ue.r.appspot.com//stats
 ```
 
 ### Response
@@ -50,7 +50,7 @@ Date: Wed, 21 Oct 2020 18:13:38 GMT
 
 `GET /isAlive`
 ```
-curl -i http://https://caramel-biplane-292821.ue.r.appspot.com//isAlive/
+curl -i https://caramel-biplane-292821.ue.r.appspot.com//isAlive/
 ```
 
 ### Response
@@ -149,7 +149,7 @@ There's also a few extra things I had to considerate when designing the "ratio" 
 I decided not to include it here because this document is getting large enough, but you can ask me.
 
 Right now the stats measure won't be accurate for more than one instance. It can be easily fixed by "updating" the stats
-by adding a background job that updates the stats based on the DB records.
+by adding a background job that updates the stats based on the DB records every one second or so.
 
 ## Docker
 
