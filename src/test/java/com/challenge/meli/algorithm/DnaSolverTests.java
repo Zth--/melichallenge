@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 import static com.challenge.meli.algorithm.DnaSolver.*;
 import static org.assertj.core.api.Assertions.*;
 
-class MutantControllerTests {
+class DnaSolverTests {
 
     // Expected paths are always the As
 

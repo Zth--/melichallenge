@@ -3,6 +3,66 @@
 I made this API using Java 11 and Spring as the framework.
 This is my first time implementing a scalable API and my first time using Google App Engine.
 I tried to make this document as complete as possible, so here it goes.
+The whole explanation is after the endpoints so please don't skip it.
+
+# The endpoints
+
+## Check if certain DNA is human or mutant
+
+### Request
+`POST /mutant`
+```
+curl -i -d '{"dna":["AAAACA","CTCTCT","TCTCTC","GGGTTT","TAAAGG","GGGTTT"]}' http://localhost:8080/mutant -H "Content-Type: application/json"
+```
+
+### Response
+```
+HTTP/1.1 200 
+Content-Length: 0
+Date: Wed, 21 Oct 2020 18:10:09 GMT
+```
+
+It will answer 200 if it's mutant. 403 if it's a human. 400 if it's a bad request.
+
+## Checking the stats
+
+### Request
+
+`GET /stats`
+```
+curl -i http://localhost:8080/stats
+```
+
+### Response
+
+```
+HTTP/1.1 200 
+Content-Type: application/json
+Transfer-Encoding: chunked
+Date: Wed, 21 Oct 2020 18:13:38 GMT
+
+{"count_human_dna":1,"count_mutant_dna":2,"ratio":0.5}
+```
+
+## Health check
+
+### Request
+
+`GET /isAlive`
+```
+curl -i http://localhost:8080/isAlive/
+```
+
+### Response
+
+```
+HTTP/1.1 200 
+Content-Length: 0
+Date: Wed, 21 Oct 2020 18:04:30 GMT
+```
+
+###
+
 
 # Level 1
 
@@ -101,7 +161,7 @@ rows per second on my testings). Fixing that constraint is crucial to #####FINIS
 ## The final test
 
 Again, on a real world scenario a final test is mandatory. After skimming through some documents I realized that
-creating a million RPS is a daunting task and I decided not to do it. Please correct me if I'm wrong.
+creating a million RPS is a daunting task and I decided not to do it. Please correct me if there's an easy way.
 
 ## Last bits
 
