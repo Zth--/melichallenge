@@ -13,7 +13,7 @@ public class PersistenceBackgroundJob {
     @Autowired
     BufferService bufferService;
 
-    Logger logger = LoggerFactory.getLogger(PersistenceBackgroundJob.class);
+    final Logger logger = LoggerFactory.getLogger(PersistenceBackgroundJob.class);
 
     // fixedDelay will wait until the last invocation finishes before executing again.
     @Scheduled(fixedDelay = 1000) // 1 second
