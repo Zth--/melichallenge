@@ -67,23 +67,32 @@ Date: Wed, 21 Oct 2020 18:04:30 GMT
 # Level 1
 
 The algorithm can be found on the file DnaSolver and it is pretty much self-explanatory.
+
 It is as efficient as possible.
+
 It receives a (NxN) matrix and returns true if there are four consecutive letters (possible letters are A,T,G,C).
+
 Pretty much like the game Connect 4 but with four colours instead of only two.
+
 In the worst case scenario it has to check all the possible combinations, which of course gets more expensive with larger matrices.
+
 It doesn't calculate "impossible paths", but that optimization only matters for relatively small matrices.
 
 
 # Level 2
 
 There's not much to be said about this level, it is a simple "/mutant" endpoint that works with the previous algorithm.
+
 It has to answer 200-OK if it's a mutant and 403-Forbidden if it's a human.
+
 What I had to consider here is what to do if Magneto sends invalid dna sequences, should I answer 400-Bad Request or
+
 stick to 403-Forbidden? I talk a little more about this on the file DnaSolver.
 
 # Level 3
 
 This level is far more complex than the previous two, and I spent most of my time tackling this one.
+
 First I'll talk a little bit about the design that I chose for the problem given the considerations
 
 ## Constraints
@@ -107,14 +116,19 @@ Based on the aforementioned constraints I had to choose a few things.
  would be _hard_ (at least for me, I've never done it!)
 
 Even without a real time DB I needed some kind of thread-safe global datastore to keep a queue of data to-be-inserted.
+
 I could've used Redis or some other thing but honestly that would've been an overkill.
+
 So I googled a bit for a data structure and found that ConcurrentLinkedQueue covered my needs.
+
 Well, at this point I had to decide what strategy to use to push that data to the DB. I came up with a simple background
-job that checks the queue every second and tries to batch insert it (there's only one background job running at
-a time)
+
+job that checks the queue every second and tries to batch insert it (there's only one background job running at a time)
+
 Cool, and what about the DB itself? Well, to be honest this was my main concern. I ran into multiple problems while
 trying to tackle the "only one row per dna" problem. I thought and tried different things but I ended up keeping it
 simple.
+
 Amongst the things I considered:
  * My first idea was to do a batch insert of the queue while ignoring duplicates. 
  * Another idea was to dump the queue into a temporary table and then merge to a main table without the duplicates.
@@ -150,13 +164,16 @@ I decided not to include it here because this document is getting large enough, 
 ## Docker
 
 On a real-world scenario I would've gone with a docker-compose file.
+
 But I think it would've been out of the scope of the challenge and I had a lot of things to do already.
 
 ## The bottleneck
 
 While not perfect I consider my design to be a good MVP (not for a real world scenario but for a challenge).
+
 It won't be able to hold a million RPS for a long period of time because the "cleaning" of the memory is slow (only a few thousand
-rows per second on my testings). Fixing that constraint is crucial to #####FINISH PLEASE
+rows per second on my testings). I think I can come up with different ideas on how to approach this problem but I won't talk
+about them here.
 
 ## The final test
 
