@@ -12,7 +12,7 @@ The whole explanation is after the endpoints so please don't skip it.
 ### Request
 `POST /mutant`
 ```
-curl -i -d '{"dna":["AAAACA","CTCTCT","TCTCTC","GGGTTT","TAAAGG","GGGTTT"]}' http://localhost:8080/mutant -H "Content-Type: application/json"
+curl -i -d '{"dna":["AAAACA","CTCTCT","TCTCTC","GGGTTT","TAAAGG","GGGTTT"]}' http://https://caramel-biplane-292821.ue.r.appspot.com//mutant -H "Content-Type: application/json"
 ```
 
 ### Response
@@ -30,7 +30,7 @@ It will answer 200 if it's mutant. 403 if it's a human. 400 if it's a bad reques
 
 `GET /stats`
 ```
-curl -i http://localhost:8080/stats
+curl -i http://https://caramel-biplane-292821.ue.r.appspot.com//stats
 ```
 
 ### Response
@@ -50,7 +50,7 @@ Date: Wed, 21 Oct 2020 18:13:38 GMT
 
 `GET /isAlive`
 ```
-curl -i http://localhost:8080/isAlive/
+curl -i http://https://caramel-biplane-292821.ue.r.appspot.com//isAlive/
 ```
 
 ### Response
@@ -107,13 +107,9 @@ Based on the aforementioned constraints I had to choose a few things.
  would be _hard_ (at least for me, I've never done it!)
 
 Even without a real time DB I needed some kind of thread-safe global datastore to keep a queue of data to-be-inserted.
-
 I could've used Redis or some other thing but honestly that would've been an overkill.
-
 So I googled a bit for a data structure and found that ConcurrentLinkedQueue covered my needs.
-
 Well, at this point I had to decide what strategy to use to push that data to the DB. I came up with a simple background
-
 job that checks the queue every second and tries to batch insert it (there's only one background job running at a time)
 
 Cool, and what about the DB itself? Well, to be honest this was my main concern. I ran into multiple problems while
@@ -129,7 +125,7 @@ To be completely honest I couldn't get the batch insert to properly work in a re
 ship it without it. At this point I think I've addressed all the levels. Spending extra time into researching
 and fixing this inconvenience properly wouldn't have been a good trade-off of my time.
 
-So I decided to go with 1 server - 1 db architecture. 
+The current design is only capable of working with 1 server - 1 db architecture, extending it wouldn't be difficult though.
 
 ## Stats
 
@@ -151,6 +147,9 @@ Ah, I almost forgot to mention that the StatsService counts the number of mutant
 
 There's also a few extra things I had to considerate when designing the "ratio" value.
 I decided not to include it here because this document is getting large enough, but you can ask me.
+
+Right now the stats measure won't be accurate for more than one instance. It can be easily fixed by "updating" the stats
+by adding a background job that updates the stats based on the DB records.
 
 ## Docker
 
