@@ -63,6 +63,12 @@ Date: Wed, 21 Oct 2020 18:04:30 GMT
 
 ###
 
+Why Google App Engine? I didn't think much of it, both had a free tier with more stuff than I needed so I just picked one.
+
+Why Java 11 and not 8 or 14? Well, Google App Engine doesn't support 14 yet and 8 had a lot of deprecated stuff.
+
+Why Spring? Why not? It's a popular framework and I'm comfortable with it.
+
 
 # Level 1
 
@@ -71,7 +77,7 @@ It is as efficient as possible.
 It receives a (NxN) matrix and returns true if there are four consecutive letters (possible letters are A,T,G,C).
 Pretty much like the game Connect 4 but with four colours instead of only two.
 In the worst case scenario it has to check all the possible combinations, which of course gets more expensive with larger matrices.
-It doesn't calculate "impossible paths", but that optimization only matters for relatively small matrices.
+The API does validate if the matrix has the same amount of rows and columns but it does not validate the possible letters.
 
 
 # Level 2
@@ -108,7 +114,9 @@ Based on the aforementioned constraints I had to choose a few things.
 
 Even without a real time DB I needed some kind of thread-safe global datastore to keep a queue of data to-be-inserted.
 I could've used Redis or some other thing but honestly that would've been an overkill.
-So I googled a bit for a data structure and found that ConcurrentLinkedQueue covered my needs.
+So I googled a bit for a data structure and found that ConcurrentHashMap covered my needs, I needed some non-blocking
+data structure that doesn't contain duplicates. (At first I went with a ConcurrentLinkedQueue but due to the way I designed 
+the db connection it ended up having an annoying problem)
 Well, at this point I had to decide what strategy to use to push that data to the DB. I came up with a simple background
 job that checks the queue every second and tries to batch insert it (there's only one background job running at a time)
 
@@ -117,13 +125,13 @@ trying to tackle the "only one row per dna" problem. I thought and tried differe
 simple.
 
 Amongst the things I considered:
- * My first idea was to do a batch insert of the queue while ignoring duplicates. 
+ * My first idea was to do a batch insert of the queue while ignoring duplicates. (INSERT IGNORE statement)
  * Another idea was to dump the queue into a temporary table and then merge to a main table without the duplicates.
  * The last idea was to dump the queue into a file and then insert it into the DB. I read that this performs really well.
 
 To be completely honest I couldn't get the batch insert to properly work in a reasonable amount of time so I decided to
-ship it without it. At this point I think I've addressed all the levels. Spending extra time into researching
-and fixing this inconvenience properly wouldn't have been a good trade-off of my time.
+ship it without it. At this point I think I had addressed all the levels. Spending extra time into researching
+and fixing this inconvenience properly wouldn't have been a good trade-off of time.
 
 The current design is only capable of working with 1 server - 1 db architecture, extending it wouldn't be difficult though.
 
@@ -172,7 +180,7 @@ But I think it would've been out of the scope of the challenge and I had a lot o
 
 ## The final test
 
-Again, on a real world scenario a final test is mandatory. After skimming through some documents I realized that
+Again, on a real world scenario a stress test is mandatory. After skimming through some documents I realized that
 creating a million RPS is a daunting task and I decided not to do it. Please correct me if there's an easy way.
 
 # Last bits
