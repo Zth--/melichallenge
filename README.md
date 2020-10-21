@@ -12,7 +12,7 @@ The whole explanation is after the endpoints so please don't skip it.
 ### Request
 `POST /mutant`
 ```
-curl -i -d '{"dna":["AAAACA","CTCTCT","TCTCTC","GGGTTT","TAAAGG","GGGTTT"]}' https://caramel-biplane-292821.ue.r.appspot.com//mutant -H "Content-Type: application/json"
+curl -i -d '{"dna":["AAAACA","CTCTCT","TCTCTC","GGGTTT","TAAAGG","GGGTTT"]}' https://caramel-biplane-292821.ue.r.appspot.com/mutant -H "Content-Type: application/json"
 ```
 
 ### Response
@@ -30,7 +30,7 @@ It will answer 200 if it's mutant. 403 if it's a human. 400 if it's a bad reques
 
 `GET /stats`
 ```
-curl -i https://caramel-biplane-292821.ue.r.appspot.com//stats
+curl -i https://caramel-biplane-292821.ue.r.appspot.com/stats
 ```
 
 ### Response
@@ -50,7 +50,7 @@ Date: Wed, 21 Oct 2020 18:13:38 GMT
 
 `GET /isAlive`
 ```
-curl -i https://caramel-biplane-292821.ue.r.appspot.com//isAlive/
+curl -i https://caramel-biplane-292821.ue.r.appspot.com/isAlive
 ```
 
 ### Response
@@ -148,14 +148,9 @@ Ah, I almost forgot to mention that the StatsService counts the number of mutant
 There's also a few extra things I had to considerate when designing the "ratio" value.
 I decided not to include it here because this document is getting large enough, but you can ask me.
 
-Right now the stats measure won't be accurate for more than one instance. It can be easily fixed by "updating" the stats
-by adding a background job that updates the stats based on the DB records every one second or so.
-
-## Docker
-
-On a real-world scenario I would've gone with a docker-compose file.
-
-But I think it would've been out of the scope of the challenge and I had a lot of things to do already.
+Right now the stats won't be accurate for more than one instance. It can be easily fixed 
+by adding a background job that updates the stats based on the DB records every one minute or so. So every instance
+would be on sync. While this is a very simple thing to do I sticked with 1 server - 1 db design.
 
 ## The bottleneck
 
@@ -165,12 +160,22 @@ It won't be able to hold a million RPS for a long period of time because the "cl
 rows per second on my testings). I think I can come up with different ideas on how to approach this problem but I won't talk
 about them here.
 
+Another important bit I didn't mention is that the instance will probably crash if given more requests than it can handle.
+It'll run out of memory.
+
+## Docker
+
+On a real-world scenario I would've gone with a docker-compose file.
+
+But I think it would've been out of the scope of the challenge and I had a lot of things to do already.
+
+
 ## The final test
 
 Again, on a real world scenario a final test is mandatory. After skimming through some documents I realized that
 creating a million RPS is a daunting task and I decided not to do it. Please correct me if there's an easy way.
 
-## Last bits
+# Last bits
 
 Pulling this off wasn't the easiest thing in the world, so I really hope that this is good enough.
 I'd consider databases my weakest point, I don't work with them on my current job so I don't get the opportunity
