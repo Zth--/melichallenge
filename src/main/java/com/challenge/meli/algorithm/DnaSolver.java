@@ -1,6 +1,7 @@
-package com.challenge.meli.dna;
+package com.challenge.meli.algorithm;
 
-public class DnaSolver {
+// Level 1 algorithm.
+public abstract class DnaSolver {
     public static boolean isMutant(String[] dna) {
         return checkRows(dna) || checkColumns(dna) || checkDiagonals(dna);
     }
@@ -24,14 +25,11 @@ public class DnaSolver {
     }
 
     public static boolean checkRows(String[] dna) {
-        int occurrences;
-        for(String row : dna) {
-            occurrences = 1;
-            for(int i = 1; i < row.length(); i++) {
-                if(row.charAt(i) == row.charAt(i - 1)){
-                    occurrences++;
-                } else { occurrences = 1; }
-                if(occurrences > 3) {
+        for(int col = 0; col < dna[0].length() - 3; col++) {
+            for(int row = 0; row < dna.length; row++) {
+                if( (dna[row].charAt(col) == dna[row].charAt(col + 1)) &&
+                        (dna[row].charAt(col + 1) == dna[row].charAt(col + 2)) &&
+                        (dna[row].charAt(col + 2) == dna[row].charAt(col + 3)) ) {
                     return true;
                 }
             }
@@ -40,11 +38,11 @@ public class DnaSolver {
     }
 
     public static boolean checkColumns(String[] dna) {
-        for(int row = 0; row < dna[0].length(); row++) {
-            for(int col = 0; col < dna.length - 3; col++) {
-                if( (dna[col].charAt(row) == dna[col + 1].charAt(row)) &&
-                        (dna[col + 1].charAt(row) == dna[col + 2].charAt(row)) &&
-                        (dna[col + 2].charAt(row) == dna[col + 3].charAt(row)) ) {
+        for(int col = 0; col < dna[0].length(); col++) {
+            for(int row = 0; row < dna.length - 3; row++) {
+                if( (dna[row].charAt(col) == dna[row + 1].charAt(col)) &&
+                        (dna[row + 1].charAt(col) == dna[row + 2].charAt(col)) &&
+                        (dna[row + 2].charAt(col) == dna[row + 3].charAt(col)) ) {
                     return true;
                 }
             }
@@ -54,21 +52,21 @@ public class DnaSolver {
 
     public static boolean checkDiagonals(String[] dna) {
         // Major diagonal ╲
-        for(int row = 0; row < dna[0].length() - 3; row++) {
-            for(int col = 0; col < dna.length - 3; col++) {
-                if( (dna[row].charAt(col) == dna[row + 1].charAt(col + 1)) &&
-                        (dna[row + 1].charAt(col + 1) == dna[row + 2].charAt(col + 2)) &&
-                        (dna[row + 2].charAt(col + 2) == dna[row + 3].charAt(col + 3))) {
+        for(int col = 0; col < dna[0].length() - 3; col++) {
+            for(int row = 0; row < dna.length - 3; row++) {
+                if( (dna[col].charAt(row) == dna[col + 1].charAt(row + 1)) &&
+                        (dna[col + 1].charAt(row + 1) == dna[col + 2].charAt(row + 2)) &&
+                        (dna[col + 2].charAt(row + 2) == dna[col + 3].charAt(row + 3))) {
                     return true;
                 }
             }
         }
         // Minor diagonal ╱
-        for(int row = 0; row < dna[0].length(); row++) {
-            for(int col = 3; col < dna.length; col++) {
-                if( (dna[row].charAt(col) == dna[row + 1].charAt(col - 1)) &&
-                        (dna[row + 1].charAt(col - 1) == dna[row + 2].charAt(col - 2)) &&
-                        (dna[row + 2].charAt(col - 2) == dna[row + 3].charAt(col - 3))) {
+        for(int col = 0; col < dna[0].length() - 3; col++) {
+            for(int row = 3; row < dna.length; row++) {
+                if( (dna[col].charAt(row) == dna[col + 1].charAt(row - 1)) &&
+                        (dna[col + 1].charAt(row - 1) == dna[col + 2].charAt(row - 2)) &&
+                        (dna[col + 2].charAt(row - 2) == dna[col + 3].charAt(row - 3))) {
                     return true;
                 }
             }
