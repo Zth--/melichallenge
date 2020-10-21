@@ -6,6 +6,8 @@ import javax.persistence.*;
 
 import static com.challenge.meli.algorithm.DnaSolver.isMutant;
 
+// This class is both used for deserialization and for the DB
+// If it was a bit bigger or complex I would've splitted it
 @Entity
 @Table(name = "people")
 public class PersonModel {
